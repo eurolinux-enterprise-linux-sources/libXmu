@@ -1,11 +1,12 @@
+# TODO: libXmuu split and/or elf filter emulation
+
 Summary: X.Org X11 libXmu/libXmuu runtime libraries
 Name: libXmu
-Version: 1.0.5
-Release: 1%{?dist}
+Version: 1.1.1
+Release: 2%{?dist}
 License: MIT
 Group: System Environment/Libraries
 URL: http://www.x.org
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Source0: ftp://ftp.x.org/pub/individual/lib/%{name}-%{version}.tar.bz2
 
@@ -13,7 +14,7 @@ BuildRequires: xorg-x11-util-macros
 BuildRequires: libX11-devel
 BuildRequires: libXext-devel
 BuildRequires: libXt-devel
-BuildRequires: libXau-devel
+BuildRequires: xmlto
 
 %description
 X.Org X11 libXmu/libXmuu runtime libraries
@@ -22,10 +23,6 @@ X.Org X11 libXmu/libXmuu runtime libraries
 Summary: X.Org X11 libXmu development package
 Group: Development/Libraries
 Requires: %{name} = %{version}-%{release}
-Requires: pkgconfig
-
-# Pull these in for xmu.pc
-Requires: xorg-x11-proto-devel libX11-devel libXt-devel libXext-devel
 
 %description devel
 X.Org X11 libXmu development package
@@ -33,14 +30,8 @@ X.Org X11 libXmu development package
 %prep
 %setup -q
 
-# Disable static library creation by default.
-%define with_static 0
-
 %build
-%configure \
-%if ! %{with_static}
-	--disable-static
-%endif
+%configure --disable-static
 make  %{?_smp_mflags}
 
 %install
@@ -50,6 +41,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 # We intentionally don't ship *.la files
 rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
+
+# fixup later
+rm -rf $RPM_BUILD_ROOT%{_docdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -86,20 +80,35 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/X11/Xmu/StdCmap.h
 %{_includedir}/X11/Xmu/StdSel.h
 %{_includedir}/X11/Xmu/SysUtil.h
+%{_includedir}/X11/Xmu/WhitePoint.h
 %{_includedir}/X11/Xmu/WidgetNode.h
 %{_includedir}/X11/Xmu/WinUtil.h
 %{_includedir}/X11/Xmu/Xct.h
 %{_includedir}/X11/Xmu/Xmu.h
-%if %{with_static}
-%{_libdir}/libXmu.a
-%{_libdir}/libXmuu.a
-%endif
 %{_libdir}/libXmu.so
 %{_libdir}/libXmuu.so
 %{_libdir}/pkgconfig/xmu.pc
 %{_libdir}/pkgconfig/xmuu.pc
 
 %changelog
+* Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.1.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
+* Tue Mar 06 2012 Adam Jackson <ajax@redhat.com> 1.1.1-1
+- libXmu 1.1.1
+
+* Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.1.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
+* Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.1.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
+* Mon Nov 08 2010 Adam Jackson <ajax@redhat.com> 1.1.0-1
+- libXmu 1.1.0
+
+* Fri Feb 05 2010 Peter Hutterer <peter.hutterer@redhat.com> 1.0.5-2
+- Remove BR of libXau-devel, not needed.
+
 * Thu Sep 24 2009 Peter Hutterer <peter.hutterer@redhat.com> 1.0.5-1
 - libXmu 1.0.5
 
