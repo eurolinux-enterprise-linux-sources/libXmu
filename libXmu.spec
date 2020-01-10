@@ -3,7 +3,7 @@
 Summary: X.Org X11 libXmu/libXmuu runtime libraries
 Name: libXmu
 Version: 1.1.1
-Release: 4%{?dist}
+Release: 5.1%{?dist}
 License: MIT
 Group: System Environment/Libraries
 URL: http://www.x.org
@@ -93,6 +93,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pkgconfig/xmuu.pc
 
 %changelog
+* Wed Feb 12 2014 Adam Jackson <ajax@redhat.com> 1.1.1-5.1
+- Mass rebuild
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.1.1-5
+- Mass rebuild 2013-12-27
+
 * Thu Mar 07 2013 Peter Hutterer <peter.hutterer@redhat.com> - 1.1.1-4
 - autoreconf for aarch64
 
